@@ -1,0 +1,31 @@
+<%- include('partials/header', {titulo: 'Mapa' }) %>
+
+  <!-- NAVIGATION -->
+  <%- include('partials/navbar', { titulo: 'Mapa' }) %>
+
+    <!-- MAIN -->
+    <main>
+
+      <!-- MAP SECTION -->
+      <section class="card map-card">
+
+        <h2 class="section-title title-green">
+          🗺️ Mapa Interativo de Itens
+        </h2>
+
+        <p class="map-description">
+          Use este mapa interativo para encontrar rapidamente recursos,
+          ingredientes e locais importantes em Heartopia.
+        </p>
+
+        <div class="map-container">
+          <iframe src="https://webresources.cc/heartopia/en.html" title="Heartopia Interactive Map" loading="lazy">
+          </iframe>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('partials/footer') %>
