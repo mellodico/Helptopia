@@ -36,3 +36,6 @@ O aplicativo será executado em `http://localhost:3000`. Abra seu navegador e ac
 - `views/`: Templates EJS para as páginas
 - `public/`: Arquivos estáticos (CSS, imagens)
 - `package.json`: Dependências e scripts do projeto
+
+Criado por: 
+Felipe Sorrentino e Erin Sarmento.
