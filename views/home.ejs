@@ -1,30 +1,7 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Helptopia – Guia para Heartopia</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <!-- ── NAVIGATION ── -->
-    <nav>
-      <div class="nav-brand">
-        <h1>Helptopia</h1>
-        <span>Guia para Heartopia</span>
-      </div>
-      <ul class="nav-links">
-        <li>
-          <a href="index.html" class="active"> <span>🏠</span> Início </a>
-        </li>
-        <li>
-          <a href="guia.html"> <span>📖</span> Guia de Lucro </a>
-        </li>
-        <li>
-          <a href="mapa.html"> <span>🗺️</span> Mapa de Itens </a>
-        </li>
-      </ul>
-    </nav>
+<%- include('partials/header', {titulo: 'Início' }) %>
+
+  <!-- ── NAVIGATION ── -->
+  <%- include('partials/navbar', {titulo: 'Início' }) %>
 
     <!-- ── MAIN CONTENT ── -->
     <main>
@@ -107,9 +84,5 @@
       </div>
     </main>
 
-    <footer>
-      &copy; 2026 Helptopia &mdash; Guia não oficial para Heartopia. Feito com
-      🩷
-    </footer>
-  </body>
-</html>
+    <!-- FOOTER -->
+    <%- include('partials/footer') %>
