@@ -1,0 +1,168 @@
+<%- include('partials/header', {titulo: 'Códigos' }) %>
+
+  <%- include('partials/navbar', { pagina: 'codigos' }) %>
+
+    <main>
+      <section class="card hero-card hero-card-centered">
+        <div class="hero-content">
+          <span class="hero-badge">🔐 CENTRO DE RESGATE</span>
+          <h2>Códigos de Resgate</h2>
+          <p>
+            Resgate esses códigos no jogo para receber recompensas especiais, como ouro, cristais e outros recursos valiosos!
+          </p>
+        </div>
+      </section>
+
+      <section class="card how-to-card">
+        <h3 class="section-title"><span>❓</span> Como Resgatar</h3>
+        <div class="steps-grid">
+          <div class="step">
+            <div class="step-number">1</div>
+            <p class="step-text">Abra o menu do jogo</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <p class="step-text">Toque em 'Configurações' > 'Resgatar Código'</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <p class="step-text">Digite o código exatamente como mostrado</p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <p class="step-text">Confirme e receba suas recompensas!</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card about-card">
+        <h3 class="section-title"><span>🎁</span> Códigos Disponíveis</h3>
+
+        <div class="codes-grid">
+          <% if (typeof listaCodigos !=='undefined' && listaCodigos.length> 0) { %>
+            <% listaCodigos.forEach((item, index) => { %>
+              <div class="code-box" id="code-<%= index %>" data-code="<%= item.codigo %>">
+                <div class="code-badges-container">
+                  <span class="code-badge <%= item.status === 'Ativo' ? 'active' : 'expired' %>">
+                    <%= item.status === 'Ativo' ? 'ATIVO' : 'EXPIRADO' %>
+                  </span>
+                  <span class="code-badge redeemed" id="redeemed-<%= index %>" style="display: none;">
+                    RESGATADO
+                  </span>
+                </div>
+
+                <div class="code-header">
+                  <div class="code-icon">
+                    <%= item.icone || '💎' %>
+                  </div>
+                </div>
+
+                <div class="code-info">
+                  <h4 class="code-text">
+                    <%= item.codigo %>
+                  </h4>
+                  
+                  <p class="code-reward-label">💎 PRÉMIOS</p>
+                  <p class="code-reward">
+                    <%= item.recompensa %>
+                  </p>
+
+                  <p class="code-status <%= item.status === 'Ativo' ? 'status-ativo' : 'status-expirado' %>">
+                    <% if(item.status==='Ativo' && item.expira) { %>
+                      Expira em: <%= item.expira %>
+                        <% } else { %>
+                          <%= item.status %>
+                            <% } %>
+                  </p>
+                </div>
+
+                <div style="display: flex; gap: 12px; align-items: center;">
+                  <button class="copy-btn" style="flex: 1;" onclick="copyToClipboard('<%= item.codigo %>', this)">
+                    <i class="copy-icon">⧉</i> <span class="btn-text">Copiar</span>
+                  </button>
+                  <button class="redeem-btn" id="redeem-btn-<%= index %>" onclick="toggleRedeemed(<%= index %>, this)" title="Marcar como resgatado">
+                    ✓
+                  </button>
+                </div>
+
+              </div>
+              <% }) %>
+                <% } else { %>
+                  <p>Nenhum código disponível no momento. Volte em breve!</p>
+                  <% } %>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const REDEEMED_CODES_KEY = 'helptopia_redeemed_codes';
+
+      // Carregar códigos resgatados ao iniciar
+      function loadRedeemedCodes() {
+        const redeemed = JSON.parse(localStorage.getItem(REDEEMED_CODES_KEY) || '[]');
+        const codeElements = document.querySelectorAll('.code-box[data-code]');
+        codeElements.forEach((el, index) => {
+          const codeValue = el.getAttribute('data-code');
+          if (redeemed.includes(codeValue)) {
+            markAsRedeemed(index, true);
+          }
+        });
+      }
+
+      function toggleRedeemed(index, btnElement) {
+        const codeBox = document.getElementById(`code-${index}`);
+        const codeValue = codeBox.getAttribute('data-code');
+        const redeemed = JSON.parse(localStorage.getItem(REDEEMED_CODES_KEY) || '[]');
+        
+        if (redeemed.includes(codeValue)) {
+          // Remover dos resgatados
+          const newRedeemed = redeemed.filter(c => c !== codeValue);
+          localStorage.setItem(REDEEMED_CODES_KEY, JSON.stringify(newRedeemed));
+          markAsRedeemed(index, false);
+        } else {
+          // Adicionar aos resgatados
+          redeemed.push(codeValue);
+          localStorage.setItem(REDEEMED_CODES_KEY, JSON.stringify(redeemed));
+          markAsRedeemed(index, true);
+        }
+      }
+
+      function markAsRedeemed(index, isRedeemed) {
+        const codeBox = document.getElementById(`code-${index}`);
+        const redeemedBadge = document.getElementById(`redeemed-${index}`);
+        const redeemBtn = document.getElementById(`redeem-btn-${index}`);
+        
+        if (isRedeemed) {
+          codeBox.classList.add('redeemed-box');
+          redeemedBadge.style.display = 'inline-block';
+          redeemBtn.classList.add('redeem-btn-active');
+        } else {
+          codeBox.classList.remove('redeemed-box');
+          redeemedBadge.style.display = 'none';
+          redeemBtn.classList.remove('redeem-btn-active');
+        }
+      }
+
+      function copyToClipboard(text, btnElement) {
+        navigator.clipboard.writeText(text).then(() => {
+          const textSpan = btnElement.querySelector('.btn-text');
+          const originalText = textSpan.innerText;
+          const originalBg = btnElement.style.background;
+
+          btnElement.classList.add('copied');
+          textSpan.innerText = "Copiado!";
+          btnElement.style.background = 'var(--accent-green)';
+
+          setTimeout(() => {
+            btnElement.classList.remove('copied');
+            textSpan.innerText = originalText;
+            btnElement.style.background = originalBg;
+          }, 2000);
+        });
+      }
+
+      // Carregar códigos resgatados ao carregar a página
+      document.addEventListener('DOMContentLoaded', loadRedeemedCodes);
+    </script>
+
+    <%- include('partials/footer') %>
