@@ -1,4 +1,5 @@
 const express = require('express');
+const codigosData = require('./data/codigos');
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -10,6 +11,14 @@ app.get('/', (req, res) => {
 
 app.get('/guia', (req, res) => {
   res.render('guia', { pagina: 'guia' });
+});
+
+app.get('/codigos', (req, res) => {
+  // Enviamos 'pagina' para o menu e 'listaCodigos' para os cards
+  res.render('codigos', { 
+    pagina: 'codigos', 
+    listaCodigos: codigosData 
+  });
 });
 
 app.get('/mapa', (req, res) => {
