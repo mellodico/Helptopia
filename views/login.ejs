@@ -1,0 +1,31 @@
+<%- include('partials/header', {titulo: 'Login' }) %>
+
+  <%- include('partials/navbar', { pagina: 'login' }) %>
+
+    <main>
+
+      <section class="card login-card">
+        <form class="login-form" method="POST" action="/login">
+          <div class="form-group">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" name="username" placeholder="seu_usuario" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Entrar</button>
+            <a href="/register" class="btn btn-secondary">Criar Conta</a>
+          </div>
+
+          <div class="form-footer">
+            <a href="#" class="link-forgot">Esqueceu sua senha?</a>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>
