@@ -25,7 +25,7 @@ app.use(express.json());
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-// 🔥 rotas
+// rotas
 app.use(authRoutes);
 app.use(pageRoutes);
 
