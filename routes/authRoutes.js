@@ -15,13 +15,13 @@ router.post("/login", async (req, res) => {
     const usuario = await buscarPorNome(username);
 
     if (!usuario) {
-      return res.send("Usuário não encontrado");
+      return res.render("login", { erro: "Usuário ou senha incorretos"});
     }
 
     const senhaValida = await bcrypt.compare(password, usuario.senha);
 
     if (!senhaValida) {
-      return res.send("Senha incorreta");
+      return res.render("login", { erro: "Usuário ou senha incorretos"});
     }
 
     req.session.usuario = {
@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
     res.redirect("/");
   } catch (err) {
     console.error(err);
-    res.send("Erro no login");
+    res.render("login", { erro: "Erro no login"});
   }
 });
 
@@ -48,6 +48,16 @@ router.post("/register", async (req, res) => {
 
     if (password !== confirmPassword) {
       return res.send("As senhas não coincidem");
+    }
+
+    const usuarioExistente = await buscarPorNome(username);
+    if (usuarioExistente) {
+      return res.render("register", { pagina: "register", erro: "Este usuário já existe"})
+    }
+
+    const emailExistente = await db.query("SELECT * FROM usuarios WHERE email = $1", [email]);
+    if (emailExistente.rows.length > 0) {
+      return res.render("register", { pagina: "register", erro: "Este email já está cadastrado" });
     }
 
     const senhaHash = await bcrypt.hash(password, 10);
