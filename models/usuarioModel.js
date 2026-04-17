@@ -12,6 +12,16 @@ async function criarUsuario(nome, email, senhaHash) {
   return result.rows[0];
 }
 
+async function buscarPorEmail(email) {
+  const result = await pool.query(
+    "SELECT * FROM usuarios WHERE email = $1",
+    [email]
+  );
+
+  return result.rows[0];
+}
+
+
 // buscar por nome (login)
 async function buscarPorNome(nome) {
   const result = await pool.query(
@@ -25,4 +35,5 @@ async function buscarPorNome(nome) {
 module.exports = {
   criarUsuario,
   buscarPorNome,
+  buscarPorEmail
 };

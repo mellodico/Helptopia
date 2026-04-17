@@ -2,7 +2,11 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 
-const { criarUsuario, buscarPorNome } = require("../models/usuarioModel");
+const {
+  criarUsuario,
+  buscarPorNome,
+  buscarPorEmail,
+} = require("../models/usuarioModel");
 
 // LOGIN
 router.post("/login", async (req, res) => {
@@ -60,12 +64,9 @@ router.post("/register", async (req, res) => {
         erro: "Este usuário já existe",
       });
     }
+    const emailExistente = await buscarPorEmail(email);
 
-    const emailExistente = await db.query(
-      "SELECT * FROM usuarios WHERE email = $1",
-      [email],
-    );
-    if (emailExistente.rows.length > 0) {
+    if (emailExistente) {
       return res.render("register", {
         pagina: "register",
         erro: "Este email já está cadastrado",
@@ -73,7 +74,6 @@ router.post("/register", async (req, res) => {
     }
 
     const senhaHash = await bcrypt.hash(password, 10);
-
     await criarUsuario(username, email, senhaHash);
 
     res.redirect("/login");
