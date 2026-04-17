@@ -3,36 +3,54 @@
     <h1>Helptopia</h1>
     <span>Guia para Heartopia</span>
   </div>
+
   <ul class="nav-links">
     <li>
       <a href="/" class="<%= pagina === 'home' ? 'active' : '' %>">
         🏠 Início
       </a>
     </li>
+
     <li>
       <a href="/guia" class="<%= pagina === 'guia' ? 'active' : '' %>">
         📖 Guia de Lucro
       </a>
     </li>
+
     <li>
       <a href="/codigos" class="<%= pagina === 'codigos' ? 'active' : '' %>">
         🔐 Códigos
       </a>
     </li>
+
     <li>
       <a href="/mapa" class="<%= pagina === 'mapa' ? 'active' : '' %>">
         🗺️ Mapa de Itens
       </a>
     </li>
-    <li>
-      <a href="/login" class="<%= pagina === 'login' ? 'active' : '' %>">
-        🔑 Login
-      </a>
-    </li>
-    <li>
-      <a href="/register" class="<%= pagina === 'register' ? 'active' : '' %>">
-        ✨ Registrar
-      </a>
-    </li>
+
+    <% if (usuario) { %>
+      <!-- 👤 Usuário logado -->
+      <li>
+        <span>👤 <%= usuario.nome %></span>
+      </li>
+
+      <li>
+        <a href="/logout">🚪 Sair</a>
+      </li>
+    <% } else { %>
+      <!-- 🔑 Não logado -->
+      <li>
+        <a href="/login" class="<%= pagina === 'login' ? 'active' : '' %>">
+          🔑 Login
+        </a>
+      </li>
+
+      <li>
+        <a href="/register" class="<%= pagina === 'register' ? 'active' : '' %>">
+          ✨ Registrar
+        </a>
+      </li>
+    <% } %>
   </ul>
 </nav>
