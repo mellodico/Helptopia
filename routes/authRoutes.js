@@ -2,10 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 
-const {
-  criarUsuario,
-  buscarPorNome,
-} = require("../models/usuarioModel");
+const { criarUsuario, buscarPorNome } = require("../models/usuarioModel");
 
 // LOGIN
 router.post("/login", async (req, res) => {
@@ -15,13 +12,13 @@ router.post("/login", async (req, res) => {
     const usuario = await buscarPorNome(username);
 
     if (!usuario) {
-      return res.render("login", { erro: "Usuário ou senha incorretos"});
+      return res.render("login", { erro: "Usuário ou senha incorretos" });
     }
 
     const senhaValida = await bcrypt.compare(password, usuario.senha);
 
     if (!senhaValida) {
-      return res.render("login", { erro: "Usuário ou senha incorretos"});
+      return res.render("login", { erro: "Usuário ou senha incorretos" });
     }
 
     req.session.usuario = {
@@ -33,7 +30,7 @@ router.post("/login", async (req, res) => {
     res.redirect("/");
   } catch (err) {
     console.error(err);
-    res.render("login", { erro: "Erro no login"});
+    res.render("login", { erro: "Erro no login" });
   }
 });
 
@@ -43,21 +40,36 @@ router.post("/register", async (req, res) => {
 
   try {
     if (!username || !email || !password || !confirmPassword) {
-      return res.send("Preencha todos os campos");
+      return res.render("register", {
+        pagina: "register",
+        erro: "Preencha todos os campos",
+      });
     }
 
     if (password !== confirmPassword) {
-      return res.send("As senhas não coincidem");
+      return res.render("register", {
+        pagina: "register",
+        erro: "Senhas não coincidem!",
+      });
     }
 
     const usuarioExistente = await buscarPorNome(username);
     if (usuarioExistente) {
-      return res.render("register", { pagina: "register", erro: "Este usuário já existe"})
+      return res.render("register", {
+        pagina: "register",
+        erro: "Este usuário já existe",
+      });
     }
 
-    const emailExistente = await db.query("SELECT * FROM usuarios WHERE email = $1", [email]);
+    const emailExistente = await db.query(
+      "SELECT * FROM usuarios WHERE email = $1",
+      [email],
+    );
     if (emailExistente.rows.length > 0) {
-      return res.render("register", { pagina: "register", erro: "Este email já está cadastrado" });
+      return res.render("register", {
+        pagina: "register",
+        erro: "Este email já está cadastrado",
+      });
     }
 
     const senhaHash = await bcrypt.hash(password, 10);
@@ -69,10 +81,16 @@ router.post("/register", async (req, res) => {
     console.error(err);
 
     if (err.code === "23505") {
-      return res.send("Email já cadastrado");
+      return res.render("register", {
+        pagina: "register",
+        erro: "Email já cadastrado",
+      });
     }
 
-    res.send("Erro ao cadastrar usuário");
+    res.render("register", {
+      pagina: "register",
+      erro: "Erro ao cadastrar usuário",
+    });
   }
 });
 
