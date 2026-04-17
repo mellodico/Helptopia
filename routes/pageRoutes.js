@@ -7,11 +7,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.render("login", { pagina: "login" });
+  res.render("login", { pagina: "login", erro: null });
 });
 
 router.get("/register", (req, res) => {
-  res.render("register", { pagina: "register" });
+  res.render("register", { pagina: "register", erro: null });
 });
 
 router.get("/guia", (req, res) => {

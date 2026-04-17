@@ -5,6 +5,11 @@
     <main>
 
       <section class="card login-card">
+
+        <% if (erro) { %>
+          <div class="alert alert-danger"><%= erro %></div>
+        <% } %>
+
         <form class="login-form" method="POST" action="/login">
           <div class="form-group">
             <label for="username">Usuário</label>
